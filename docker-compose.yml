@@ -1,0 +1,21 @@
+cobbler6.7:
+  container_name: cobbler6.7
+  image: cobbler:6.7
+  environment:
+    - DHCP_RANGE=10.0.1.200,10.0.1.250
+    - SERVER_IP=10.0.1.9
+    - ROOT_PASSWORD=cobbler
+    - NO_DHCP_INTERFACE=eth0
+  volumes:
+    - /data/docker/cobbler/html:/var/www/html
+  net: host
+  ports:
+    - "53:53"
+    - "53:53/udp"
+    - "67:67"
+    - "67:67/udp"
+    - "69:69"
+    - "80:80"
+    - "443:443"
+    - "873:873"
+  privileged: true
