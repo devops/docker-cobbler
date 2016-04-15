@@ -7,29 +7,18 @@ python:
 services:
   - docker
 
+env:
+  DOCKER_COMPOSE_VERSION: 1.7.0
+
 before_install:
   - sudo mkdir -p /data/docker/cobbler/html
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
 
 install:
   - docker build -t cobbler:6.7 .
-  - docker run -d \
-      --privileged \
-      --net host \
-      -p 53:53 \
-      -p 53:53/udp \
-      -p 67:67 \
-      -p 67:67/udp \
-      -p 69:69/udp \
-      -p 80:80 \
-      -p 443:443 \
-      -p 873:873 \
-      --name="cobbler6.7" \
-      -v /data/docker/cobbler/html:/var/www/html \
-      -e DHCP_RANGE=10.0.1.200,10.0.1.250 \
-      -e SERVER_IP=10.0.1.9 \
-      -e ROOT_PASSWORD=cobbler \
-      -e NO_DHCP_INTERFACE=eth0 \
-      cobbler:6.7
+  - docker-compose up -d
 
 script:
   - docker ps | grep -q cobbler
