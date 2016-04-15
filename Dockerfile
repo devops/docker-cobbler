@@ -5,7 +5,7 @@
 FROM centos:6.7
 MAINTAINER z@zstack.net
 
-RUN yum update -y && yum --quiet install -y epel-release tftp-server xinetd cobbler cobbler-web dnsmasq pykickstart cman debmirror koan
+RUN yum update -y && yum install -y epel-release && yum --quiet install -y tftp-server xinetd cobbler cobbler-web dnsmasq pykickstart cman debmirror koan
 RUN yum clean all
 RUN service httpd start ; service cobblerd start ; cobbler get-loaders ; service httpd stop ; service cobblerd stop
 
